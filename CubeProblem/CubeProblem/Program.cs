@@ -13,7 +13,8 @@ namespace CubeProblem
         {
             Util.InitializeValues();
             Util.ShowStates();
-            Util.MoveCube('B', 'C');
+            StateChanger stateChanger = new StateChanger();
+            stateChanger.MoveCube('B', 'C');
             Util.ShowStates();
             Console.ReadLine();
         }
