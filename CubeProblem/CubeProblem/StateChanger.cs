@@ -31,52 +31,52 @@ namespace CubeProblem
 
         public void MoveCube(char cube, char destination)
         {
-            if (IsFree(cube))
+            if (IsFree(cube) && IsFree(destination))
+            {   
+
                 RemoveCube(cube);
 
-            bool wasPlaced = false;
-            if (destination.Equals(null))
-            {
-                wasPlaced = true;
-                Program.onTable.Add(cube);
-            }
-            else
-            if (IsFree(destination))
-            {
-                foreach (List<char> chars in Program.on)
-                {
-                    if (chars.Contains(destination))
+                bool wasPlaced = false;
+                    foreach (List<char> chars in Program.on)
+                    {
+                        if (chars.Contains(destination))
+                        {
+                            wasPlaced = true;
+                            chars.Add(cube);
+                        }
+                    }
+                    if (!wasPlaced && IsFree(destination))
                     {
                         wasPlaced = true;
-                        chars.Add(cube);
+                        List<char> pair = new List<char>();
+                        pair.Add(destination);
+                        pair.Add(cube);
+                        Program.on.Add(pair);
+                    }
+                    if (wasPlaced)
+                    {
+                        Program.free.Remove(destination);
                     }
                 }
-                if (!wasPlaced && IsFree(destination))
-                {
-                    wasPlaced = true;
-                    List<char> pair = new List<char>();
-                    pair.Add(destination);
-                    pair.Add(cube);
-                    Program.on.Add(pair);
-                }
-                if (wasPlaced)
-                {
-                    Program.free.Remove(destination);
-                }
-                else { Console.WriteLine("Could not be placed"); }
-            }
+
             else
             {
-                Console.WriteLine("Could not be picked up");
+                Console.WriteLine($"Cube {cube} could not be placed on cube {destination}");
             }
         }
 
         public void MoveCube(char cube)
         {
             if (IsFree(cube))
+            {
                 RemoveCube(cube);
 
-            Program.onTable.Add(cube);
+                Program.onTable.Add(cube);
+            }
+            else
+            {
+                Console.WriteLine($"Cube {cube} could not be placed on the table");
+            }
         }
     }
 }

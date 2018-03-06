@@ -14,7 +14,7 @@ namespace CubeProblem
             Util.InitializeValues();
             Util.ShowStates();
             StateChanger stateChanger = new StateChanger();
-            stateChanger.MoveCube('B', 'C');
+            stateChanger.MoveCube('C', 'A');
             Util.ShowStates();
             Console.ReadLine();
         }
