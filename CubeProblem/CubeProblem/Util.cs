@@ -18,16 +18,15 @@ namespace CubeProblem
             Program.free.Add('B');
             Program.free.Add('C');
         }
-        public static bool CanPickUp(char cube)
+        public static bool isFree(char cube)
         {
             return Program.free.Contains(cube);
         }
 
-        public static void MoveCube(char cube, char destination)
+        private static void RemoveCube(char cube)
         {
-            if (CanPickUp(cube))
+            if (isFree(cube))
             {
-                //pick up
                 foreach (List<char> chars in Program.on)
                 {
                     if (chars.Contains(cube))
@@ -39,39 +38,44 @@ namespace CubeProblem
                     }
                 }
                 Program.onTable.Remove(cube);
+            }
+        }
 
-                //place
-                bool wasPlaced = false;
-                if (destination.Equals(null))
+        public static void MoveCube(char cube, char destination)
+        {
+            if (isFree(cube))
+                RemoveCube(cube);
+
+            bool wasPlaced = false;
+            if (destination.Equals(null))
+            {
+                wasPlaced = true;
+                Program.onTable.Add(cube);
+            }
+            else
+            if (isFree(destination))
+            {
+                foreach (List<char> chars in Program.on)
                 {
-                    wasPlaced = true;
-                    Program.onTable.Add(cube);
-                }
-                else
-                if (Program.free.Contains(destination))
-                {
-                    foreach (List<char> chars in Program.on)
-                    {
-                        if (chars.Contains(destination))
-                        {
-                            wasPlaced = true;
-                            chars.Add(cube);
-                        }
-                    }
-                    if (!wasPlaced && Program.onTable.Contains(destination))
+                    if (chars.Contains(destination))
                     {
                         wasPlaced = true;
-                        List<char> pair = new List<char>();
-                        pair.Add(destination);
-                        pair.Add(cube);
-                        Program.on.Add(pair);
+                        chars.Add(cube);
                     }
-                    if (wasPlaced)
-                    {
-                        Program.free.Remove(destination);
-                    }
-                    else { Console.WriteLine("Could not be placed"); }
                 }
+                if (!wasPlaced && isFree(destination))
+                {
+                    wasPlaced = true;
+                    List<char> pair = new List<char>();
+                    pair.Add(destination);
+                    pair.Add(cube);
+                    Program.on.Add(pair);
+                }
+                if (wasPlaced)
+                {
+                    Program.free.Remove(destination);
+                }
+                else { Console.WriteLine("Could not be placed"); }
             }
             else
             {
@@ -81,24 +85,11 @@ namespace CubeProblem
 
         public static void MoveCube(char cube)
         {
-            if (CanPickUp(cube))
-            {
-                //pick up
-                foreach (List<char> chars in Program.on)
-                {
-                    if (chars.Contains(cube))
-                        chars.Remove(cube);
-                    if (chars.Count == 1)
-                    {
-                        Program.free.Add(chars[0]);
-                        chars.Clear();
-                    }
-                }
-                Program.onTable.Remove(cube);
+            if (isFree(cube))
+                RemoveCube(cube);
 
-                //Place
-                Program.onTable.Add(cube);
-            }
+            //Place
+            Program.onTable.Add(cube);
         }
         public static void ShowStates()
         {
